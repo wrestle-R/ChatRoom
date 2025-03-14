@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const messageSchema = new mongoose.Schema({
   roomId: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   text: {
     type: String,
@@ -17,10 +18,19 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  isPrivate: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model('Message', messageSchema);
+// Add index for fetching messages by roomId more efficiently
+messageSchema.index({ roomId: 1, createdAt: 1 });
+
+const Message = mongoose.model('Message', messageSchema);
+
+module.exports = Message;

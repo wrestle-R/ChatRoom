@@ -2,17 +2,21 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
+import PublicChat from "./components/PublicChat";
+import PrivateChat from "./components/PrivateChat";
+import DirectMessage from "./components/DirectMessage";
+import CreateRoom from "./components/CreateRoom";
+import { ThemeProvider } from "../Context/ThemeContext";
 
-// Replace with your actual Clerk publishable key
+// Get Clerk publishable key from environment variables
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function App() {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}
+    <ClerkProvider 
+      publishableKey={clerkPubKey}
       tokenCache={{
         getToken: async () => {
-          // This function would retrieve the token from your backend
-          // and format it according to your token structure
           return {
             first_name: "{{user.first_name}}",
             last_name: "{{user.last_name}}",
@@ -22,16 +26,23 @@ function App() {
         }
       }}
     >
-      <Router>
-        <div className="flex flex-col h-screen bg-gray-100">
-          <Navbar />
-          <main className="flex-1 overflow-hidden">
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
-          </main>
-        </div>
-      </Router>
+      <ThemeProvider>
+        <Router>
+          <div className="flex flex-col h-screen bg-gray-50">
+            <Navbar />
+            <main className="flex-1 overflow-hidden">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/public-chat" element={<PublicChat />} />
+                <Route path="/private-chat/:roomCode" element={<PrivateChat />} />
+                <Route path="/direct-message/:userId" element={<DirectMessage />} />
+                <Route path="/create-room" element={<CreateRoom />} />
+                <Route path="/join-room" element={<CreateRoom joinMode={true} />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </ThemeProvider>
     </ClerkProvider>
   );
 }

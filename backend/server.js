@@ -98,6 +98,32 @@ const getOnlineUsersCount = () => {
     });
   });
 
+  // Add this to your server.js file with the other API routes
+
+// Get user by userId
+app.get('/api/users', async (req, res) => {
+  try {
+    const { userId } = req.query;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required' });
+    }
+    
+    console.log(`Fetching user with userId: ${userId}`);
+    
+    const user = await User.find({ userId });
+    
+    if (!user || user.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Search users by username - Fix implementation
 app.get('/api/users/search', async (req, res) => {
   try {

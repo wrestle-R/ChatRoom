@@ -8,23 +8,29 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true
+    required: false
   },
   firstName: {
-    type: String
+    type: String,
+    required: false
   },
   lastName: {
-    type: String
+    type: String,
+    required: false
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: false
   },
   lastActive: {
     type: Date,
     default: Date.now
   }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema);
+// Add index for faster lookups
+userSchema.index({ username: 'text', firstName: 'text', lastName: 'text' });
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
