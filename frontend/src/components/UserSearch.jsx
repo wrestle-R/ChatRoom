@@ -42,8 +42,8 @@ function UserSearch({ onSelectUser }) {
   };
 
   return (
-    <div className="p-4 border-b border-gray-200">
-      <form onSubmit={handleSearch} className="flex mb-2">
+    <div className="p-4 border-b border-gray-200 ">
+      <form onSubmit={handleSearch} className="flex mb-2 text-slate-100">
         <input
           type="text"
           value={searchQuery}
